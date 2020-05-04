@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+<style>
+h1 {
+    border-bottom: 3px solid #cc9900;
+    color: #996600;
+    font-size: 30px;
+}
+table, th , td  {
+    border: 2px solid black;
+    border-collapse: collapse;
+    padding: 5px;
+    font-size: 15px;
+    text-align: center;
+    width: auto;
+
+}
+</style>
+</head>
+
+
+<body>
+<h1>okvqa visualization</h1>
+
+<div id="id01"></div>
+<script>
+var xmlhttp = new XMLHttpRequest();
+var url = "https://raw.githubusercontent.com/jiasenlu/ok-vqa-result/master/ok-vqa-vilbert.json";
+
+xmlhttp.onreadystatechange=function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        myFunction(xmlhttp.responseText);
+    }
+}
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
+function myFunction(response) {
+    var arr = JSON.parse(response);
+    var i, j;
+    var out = "<table>";
+    out += "<tr><th>" + 'Images' + "</th><th>" + 'Question' + "</th><th>" + 'GT Answer' +  "</th><th>" + 'Predict' + "</th><th>" + 'Match' + "</th><tr>"
+    
+    for(i = 0; i < arr.length; i++) {
+        match = "Wrong"
+        if (arr[i]["gt_ans"] == arr[i]["predict"]){
+            match = "Correct"
+        }
+        out += "<tr><td>" +  '<img src= "' + arr[i]["image_url"] + '" style="width:226px;height:132px;">' + "</td>"
+        out += "<td>" 
+        out += arr[i]["question"]
+        out += "</td>"
+        out += "<td>" 
+        out += arr[i]["gt_ans"]
+        out += "</td>"
+        out += "<td>" 
+        out += arr[i]["predict"]
+        out += "<td>" 
+        out += match
+        out += "</td></tr>";
+
+
+    }
+    out += "</table>";
+    document.getElementById("id01").innerHTML = out;
+}
+</script>
+</body>
+</html>
